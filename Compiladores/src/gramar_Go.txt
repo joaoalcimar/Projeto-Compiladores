@@ -3,3 +3,70 @@ import java_cup.runtime.*;
 /* Preliminaries to set up and use the scanner.  */
 init with {: scanner.init();              :};
 scan with {: return scanner.next_token(); :};
+
+https://github.com/gmh33/Java-CUP-jLex-Example/blob/master/java_cup/parser.cup   um exemplo legal
+
+
+/*///////////// Characters   /////////////////////*/
+
+terminal            newline, unicode_char, unicode_letter, unicode_digit;
+terminal            _
+terminal            octal_digit, hex_digit;
+terminal Integer    decinal_digit;
+terminal Integer    octal_digit;
+
+/* ////////////// Letters and digits /////////// */
+
+letter        = unicode_letter | "_" .
+decimal_digit = "0" … "9" .
+octal_digit   = "0" … "7" .
+hex_digit     = "0" … "9" | "A" … "F" | "a" … "f" . */
+
+/* ////////// grammar letters and digits  ///////////// */
+
+letter        ::= unicode_letter
+                | _ ;
+identifier    ::= letter { letter | unicode_digit };
+
+
+
+/* //////////////// Keywords   /////////////////////////////
+
+break        default      func         interface    select
+case         defer        go           map          struct
+chan         else         goto         package      switch
+const        fallthrough  if           range        type
+continue     for          import       return       var
+
+
+ */
+
+
+
+
+/* //////////  Operators and punctuation      ///////////////////  
+
++    &     +=    &=     &&    ==    !=    (    )
+-    |     -=    |=     ||    <     <=    [    ]
+*    ^     *=    ^=     <-    >     >=    {    }
+/    <<    /=    <<=    ++    =     :=    ,    ;
+%    >>    %=    >>=    --    !     ...   .    :
+     &^          &^=
+
+ */
+
+
+/* ///////////// Integer literals///////////////////////////
+
+int_lit     = decimal_lit | octal_lit | hex_lit .
+decimal_lit = ( "1" … "9" ) { decimal_digit } .
+octal_lit   = "0" { octal_digit } .
+hex_lit     = "0" ( "x" | "X" ) hex_digit { hex_digit } 
+
+
+/*
+
+
+
+
+

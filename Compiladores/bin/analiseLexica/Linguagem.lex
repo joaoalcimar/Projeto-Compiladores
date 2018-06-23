@@ -234,46 +234,46 @@ ID = [_|a-z|A-Z][a-z|A-Z|0-9|_]*
 {TYPE}                     { imprimir("Palavra reservada type", yytext()); }
 {VAR}                     { imprimir("Palavra reservada var", yytext()); }
 
-{TIPOBOOL} = "bool"
-{TIPOINT} = "int"
-{TIPOINT8} = "int8"
-{TIPOINT16} = "int16"
-{TIPOINT32} = "int32"
-{TIPOINT64} = "int64"
-{TIPOUINT} = "uint"
-{TIPOUINT8} = "uint8"
-{TIPOUINT16} = "uint16"
-{TIPOUINT32} = "uint32"
-{TIPOUINT64} = "uint64"
-{TIPOUINTPTR} = "uintptr"
-{TIPOFLOAT32} = "float32"
-{TIPOFLOAT64} = "float64"
-{TIPOCOMPLEX64} = "complex64"
-{TIPOCOMPLEX128} = "complex128"
-{TIPOSTRING} = "string"
-{POINTER} = "Pointer"
-{UNTYPEDBOOL} = "untyped bool"
-{UNTYPEDINT} = "untyped int"
-{UNTYPEDRUNE} = "untyped rune"
-{UNTYPEDFLOAT} = "untyped float"
-{UNTYPEDCOMPLEX} = "untyped complex"
-{UNTYPEDSTRING} = "untyped string"
-{UNTYPEDNIL} = "untyped nil"
+{TIPOBOOL} = "bool"                     { imprimir("Tipo de variável bool", yytext()); }
+{TIPOINT} = "int"                     { imprimir("Tipo de variável int", yytext()); }
+{TIPOINT8} = "int8"                     { imprimir("Tipo de variável int 8bits", yytext()); }
+{TIPOINT16} = "int16"                     { imprimir("Tipo de variável int 16bits", yytext()); }
+{TIPOINT32} = "int32"                     { imprimir("Tipo de variável int 32bits", yytext()); }
+{TIPOINT64} = "int64"                     { imprimir("Tipo de variável int 64bits", yytext()); }
+{TIPOUINT} = "uint"                     { imprimir("Tipo de variável int não-definido", yytext()); }
+{TIPOUINT8} = "uint8"                     { imprimir("Tipo de variável int não-definido de 8bits", yytext()); }
+{TIPOUINT16} = "uint16"                     { imprimir("Tipo de variável int não-definido de 16bits", yytext()); }
+{TIPOUINT32} = "uint32"                     { imprimir("Tipo de variável int não-definido de 32bits", yytext()); }
+{TIPOUINT64} = "uint64"                     { imprimir("Tipo de variável int não-definido de 64bits", yytext()); }
+{TIPOUINTPTR} = "uintptr"                     { imprimir("Tipo de variável int ", yytext()); }
+{TIPOFLOAT32} = "float32"                     { imprimir("Tipo de variável float 32bits", yytext()); }
+{TIPOFLOAT64} = "float64"                     { imprimir("Tipo de variável float 64bits", yytext()); }
+{TIPOCOMPLEX64} = "complex64"                     { imprimir("Tipo de variável numero complexo de 64bits", yytext()); }
+{TIPOCOMPLEX128} = "complex128"                     { imprimir("Tipo de variável numero complexo de 128bits", yytext()); }
+{TIPOSTRING} = "string"                     { imprimir("Tipo de variável string", yytext()); }
+{POINTER} = "Pointer"                     { imprimir("Tipo de variável apontador", yytext()); }
+{UNTYPEDBOOL} = "untyped bool"                     { imprimir("Tipo de variável untyped bool", yytext()); }
+{UNTYPEDINT} = "untyped int"                     { imprimir("Tipo de variável untyped int", yytext()); }
+{UNTYPEDRUNE} = "untyped rune"                     { imprimir("Tipo de variável untyped rune", yytext()); }
+{UNTYPEDFLOAT} = "untyped float"                     { imprimir("Tipo de variável untyped float", yytext()); }
+{UNTYPEDCOMPLEX} = "untyped complex"                     { imprimir("Tipo de variável untyped complex", yytext()); }
+{UNTYPEDSTRING} = "untyped string"                     { imprimir("Tipo de variável untyped string", yytext()); }
+{UNTYPEDNIL} = "untyped nil"                     { imprimir("Tipo de variável untyped nil", yytext()); }
 
-{FORMATSTRING}  = "%s"
-{FORMATINTEGER} = "%d"
-{FORMATFLOAT} = "%f"
-{FORMATBOOL} = "%t"
-{FORMATDEFAULT} = "%v"
-{FORMATVALOR} = "%#v"
-{FORMATTYPE} = "%T"
-{FORMATPERCENT}  = "%%"
-{FORMATPOINTER} = "%p"
-{FORMATUNDEFINED} = "%x"
+{FORMATSTRING}  = "%s"                     { imprimir("Forrmato string", yytext()); }
+{FORMATINTEGER} = "%d"                     { imprimir("Forrmato inteiro", yytext()); }
+{FORMATFLOAT} = "%f"                     { imprimir("Forrmato float", yytext()); }
+{FORMATBOOL} = "%t"                     { imprimir("Forrmato boolean", yytext()); }
+{FORMATDEFAULT} = "%v"                     { imprimir("Forrmato default", yytext()); }
+{FORMATVALOR} = "%#v"                     { imprimir("Forrmato valor", yytext()); }
+{FORMATTYPE} = "%T"                     { imprimir("Forrmato tipo generico", yytext()); }
+{FORMATPERCENT}  = "%%"                     { imprimir("Forrmato porcento", yytext()); }
+{FORMATPOINTER} = "%p"                     { imprimir("Forrmato apontador", yytext()); }
+{FORMATUNDEFINED} = "%x"                     { imprimir("Forrmato indefinido", yytext()); }
 
-{INICIOCOMENT} = "/*"
-{FINALCOMENT} = "*/"
-{EOF} = "EOF"
+{INICIOCOMENT} = "/*"                     { imprimir("Inicio do comentario", yytext()); }
+{FINALCOMENT} = "*/"                     { imprimir("Final do comentario", yytext()); }
+{EOF} = "EOF"                     { imprimir("Palavra reservada EOF var", yytext()); }
 
 {COMPLEX}                     { imprimir("Número Complexo", yytext()); }
 {INTEIRO}                     { imprimir("Número Inteiro", yytext()); }

@@ -33,7 +33,7 @@ terminal  BRANCO,  BOOL, COMPLEX, INTEIRO, FLOAT, ID;
 non terminal   program;
 non terminal   int_lit , float_lit, string_lit;
 non terminal   identificador;
-non terminal   oper_arit, oper_rel , oper_bool, binary_op, add_oper;
+non terminal   rel_op, add_op , mul_op, binary_op, unary_oper;
 non terminal   expression, UnaryExpr;
 
 
@@ -46,4 +46,20 @@ string_lit::= "`"ID"`";
 
 identificador ::= ID;
 
-oper_arit::= 
+Expression = UnaryExpr | Expression binary_op Expression;
+UnaryExpr  = PrimaryExpr | unary_op UnaryExpr
+
+binary_op  = LOR | LAND | rel_op | add_op | mul_op .
+rel_op     = IGUAL | DIFERENTE | MENOR_QUE | MENOR_IGUAL | MAIOR_QUE | MAIOR_IGUAL;
+add_op     = SOMA | SUBTRACAO | OR | XOR ;
+mul_op     = MULTIPLICACAO | DIVISAO | RESTO | SHIFT_LEFT | SHIFT_RIGHT | AND_NOT | AND ;
+
+unary_op   = SOMA | SUBTRACAO | NOT | XOR | MULTIPLICACAO | AND | ARROW; 
+
+
+FunctionType   = "func" Signature ;
+Signature      = Parameters [ Result ] ;
+Result         = Parameters | Type ;
+Parameters     = "(" [ ParameterList [ "," ] ] ")" ;
+ParameterList  = ParameterDecl { "," ParameterDecl } ;
+ParameterDecl  = [ IdentifierList ] [ "..." ] Type ;

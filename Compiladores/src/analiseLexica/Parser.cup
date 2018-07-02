@@ -49,7 +49,7 @@ identificador ::= ID;
 Expression = UnaryExpr | Expression binary_op Expression;
 UnaryExpr  = PrimaryExpr | unary_op UnaryExpr
 
-binary_op  = LOR | LAND | rel_op | add_op | mul_op .
+binary_op  = LOR | LAND | rel_op | add_op | mul_op;
 rel_op     = IGUAL | DIFERENTE | MENOR_QUE | MENOR_IGUAL | MAIOR_QUE | MAIOR_IGUAL;
 add_op     = SOMA | SUBTRACAO | OR | XOR ;
 mul_op     = MULTIPLICACAO | DIVISAO | RESTO | SHIFT_LEFT | SHIFT_RIGHT | AND_NOT | AND ;
@@ -63,3 +63,26 @@ Result         = Parameters | Type ;
 Parameters     = "(" [ ParameterList [ "," ] ] ")" ;
 ParameterList  = ParameterDecl { "," ParameterDecl } ;
 ParameterDecl  = [ IdentifierList ] [ "..." ] Type ;
+
+Operand     = Literal | OperandName | "(" Expression ")" .
+Literal     = BasicLit | CompositeLit | FunctionLit .
+BasicLit    = int_lit | float_lit | imaginary_lit | rune_lit | string_lit .
+OperandName = identifier | QualifiedIdent
+
+
+PrimaryExpr =
+	Operand |
+	Conversion |
+	MethodExpr |
+	PrimaryExpr Selector |
+	PrimaryExpr Index |
+	PrimaryExpr Slice |
+	PrimaryExpr TypeAssertion |
+	PrimaryExpr Arguments .
+
+Selector       = "." identifier .
+Index          = "[" Expression "]" .
+Slice          = "[" [ Expression ] ":" [ Expression ] "]" |
+                 "[" [ Expression ] ":" Expression ":" Expression "]" .
+TypeAssertion  = "." "(" Type ")" .
+Arguments      = "(" [ ( ExpressionList | Type [ "," ExpressionList ] ) [ "..." ] [ "," ] ] ")" .

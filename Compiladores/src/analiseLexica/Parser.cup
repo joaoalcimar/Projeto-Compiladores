@@ -1,0 +1,49 @@
+/*
+   Simple +/-/* expression language; 
+   parser evaluates constant expressions on the fly
+*/
+
+package cup.example;
+
+import java_cup.runtime.*;
+import cup.example.Lexer;
+import java.io.IOException;
+import java.io.File;
+import java.io.FileInputStream;
+
+
+
+terminal  SOMA, SUBTRACAO, MULTIPLICACAO, DIVISAO, RESTO;
+terminal  IDENTIFICADOR, AND, OR, XOR, SHIFT_LEFT, SHIFT_RIGHT, AND_NOT;
+terminal  ATRIBUICAO_SOMA, ATRIBUICAO_SUB, ATRIBUICAO_MULT, ATRIBUICAO_DIV, ATRIBUICAO_RESTO;
+terminal  ATRIBUICAO_AND, ATRIBUICAO_OR, ATRIBUICAO_XOR, ATRIBUICAO_SL, ATRIBUICAO_SR, ATRICUICAO_AND_NOT;
+terminal  LAND, LOR, ARROW, INC, DEC;
+terminal  IGUAL, MAIOR_QUE, MENOR_QUE, ATRIBUICAO, NOT;
+terminal  DIFERENTE, MENOR_IGUAL, MAIOR_IGUAL, DEFINE, ELLIPSIS;
+terminal  PARENESQ, PARENDIR, CHAVEESQ, CHAVEDIR, COLCHESQ, COLCHDIR, VIRGULA, PONTO, DOISPONTOS, PONTOVIRGULA;
+terminal  BREAK, CASE, CHAN, CONST, CONTINUE;
+terminal  DEFAULT, DEFER, ELSE, FALLTHROUGH, FOR; 
+terminal  FUNC, GO, GOTO, IF, IMPORT;
+terminal  INTERFACE, MAP, PACKAGE, RANGE, RETURN;
+terminal  SELECT, STRUCT, SWITCH, TYPE, VAR;
+terminal  TIPOBOOL, UNTYPEDNIL, UNTYPEDSTRING, TIPOSTRING, TIPOBOOL, TIPOINT, TIPOFLOAT32,TIPOFLOAT64;
+terminal  INICIOCOMENT, FINALCOMENT, EOF;
+terminal  BRANCO,  BOOL, COMPLEX, INTEIRO, FLOAT, ID;
+
+non terminal   program;
+non terminal   int_lit , float_lit, string_lit;
+non terminal   identificador;
+non terminal   oper_arit, oper_rel , oper_bool, binary_op, add_oper;
+non terminal   expression, UnaryExpr;
+
+
+
+/* The grammar rules */
+
+int_lit ::= INTEIRO;
+
+string_lit::= "`"ID"`";
+
+identificador ::= ID;
+
+oper_arit::= 

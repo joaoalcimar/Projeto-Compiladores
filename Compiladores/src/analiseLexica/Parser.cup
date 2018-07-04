@@ -32,53 +32,58 @@ terminal  BRANCO,  BOOL, COMPLEX, INTEIRO, FLOAT, ID;
 
 non terminal   program;
 non terminal   int_lit , float_lit, string_lit;
-non terminal   identificador;
+non terminal   identifier;
 non terminal   rel_op, add_op , mul_op, binary_op, unary_oper;
 non terminal   expression, UnaryExpr;
+non terminal   Operand, Literal , BasicLit, CompositeLit ,FunctionLit;
 
 
 
 /* The grammar rules */
 
-int_lit ::= INTEIRO;
+identifier ::= ID ;
 
-string_lit::= "`"ID"`";
+Expression ::= UnaryExpr | Expression binary_op Expression;
+UnaryExpr  ::= PrimaryExpr | unary_op UnaryExpr
 
-identificador ::= ID;
+binary_op  ::= LOR | LAND | rel_op | add_op | mul_op;
+rel_op     ::= IGUAL | DIFERENTE | MENOR_QUE | MENOR_IGUAL | MAIOR_QUE | MAIOR_IGUAL;
+add_op     ::= SOMA | SUBTRACAO | OR | XOR ;
+mul_op     ::= MULTIPLICACAO | DIVISAO | RESTO | SHIFT_LEFT | SHIFT_RIGHT | AND_NOT | AND ;
 
-Expression = UnaryExpr | Expression binary_op Expression;
-UnaryExpr  = PrimaryExpr | unary_op UnaryExpr
-
-binary_op  = LOR | LAND | rel_op | add_op | mul_op;
-rel_op     = IGUAL | DIFERENTE | MENOR_QUE | MENOR_IGUAL | MAIOR_QUE | MAIOR_IGUAL;
-add_op     = SOMA | SUBTRACAO | OR | XOR ;
-mul_op     = MULTIPLICACAO | DIVISAO | RESTO | SHIFT_LEFT | SHIFT_RIGHT | AND_NOT | AND ;
-
-unary_op   = SOMA | SUBTRACAO | NOT | XOR | MULTIPLICACAO | AND | ARROW; 
+unary_op   ::= SOMA | SUBTRACAO | NOT | XOR | MULTIPLICACAO | AND | ARROW; 
 
 
-FunctionType   = "func" Signature ;
+FunctionType   ::= "func" Signature ;
 Signature      = Parameters [ Result ] ;
 Result         = Parameters | Type ;
 Parameters     = "(" [ ParameterList [ "," ] ] ")" ;
 ParameterList  = ParameterDecl { "," ParameterDecl } ;
 ParameterDecl  = [ IdentifierList ] [ "..." ] Type ;
 
-Operand     = Literal | OperandName | "(" Expression ")" .
-Literal     = BasicLit | CompositeLit | FunctionLit .
-BasicLit    = int_lit | float_lit | imaginary_lit | rune_lit | string_lit .
-OperandName = identifier | QualifiedIdent
+Operand     = Literal | OperandName | "(" Expression ")" ;
+Literal     = BasicLit | CompositeLit | FunctionLit ;
+BasicLit    ::= ID | BOOL | FLOAT | INTEIRO;
+OperandName ::= identifier | QualifiedIdent;
+
+QualifiedIdent ::= PackageName PONTO identifier ;
+
+PackageClause  ::= PACKAGE PackageName ;
+PackageName    ::= identifier ;
+
+ImportDecl       ::= IMPORT PARENESQ ImportSpec | PARENESQ COLCHESQ ImportSpec PONTOVIRGULA COLCHDIR  PARENDIR PARENDIR;
+ImportSpec       ::= CHAVEESQ PONTO | PackageName CHAVEDIR ImportPath ;
+ImportPath       ::= ID ;
 
 
-PrimaryExpr =
-	Operand |
-	Conversion |
-	MethodExpr |
-	PrimaryExpr Selector |
-	PrimaryExpr Index |
-	PrimaryExpr Slice |
-	PrimaryExpr TypeAssertion |
-	PrimaryExpr Arguments .
+PrimaryExpr ::=  Operand |
+                 Conversion |
+				 MethodExpr |
+				 PrimaryExpr Selector |
+				 PrimaryExpr Index |
+				 PrimaryExpr Slice |
+				 PrimaryExpr TypeAssertion |
+				 PrimaryExpr Arguments .
 
 Selector       = "." identifier .
 Index          = "[" Expression "]" .
@@ -86,3 +91,14 @@ Slice          = "[" [ Expression ] ":" [ Expression ] "]" |
                  "[" [ Expression ] ":" Expression ":" Expression "]" .
 TypeAssertion  = "." "(" Type ")" .
 Arguments      = "(" [ ( ExpressionList | Type [ "," ExpressionList ] ) [ "..." ] [ "," ] ] ")" .
+
+
+FunctionType   = "func" Signature .
+Signature      = Parameters [ Result ] .
+Result         = Parameters | Type .
+Parameters     = "(" [ ParameterList [ "," ] ] ")" .
+ParameterList  = ParameterDecl { "," ParameterDecl } .
+ParameterDecl  = [ IdentifierList ] [ "..." ] Type .
+
+
+

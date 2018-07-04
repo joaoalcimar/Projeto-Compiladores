@@ -43,15 +43,31 @@ non terminal   Operand, Literal , BasicLit, CompositeLit ,FunctionLit;
 
 identifier ::= ID ;
 
-Expression ::= UnaryExpr | Expression binary_op Expression;
-UnaryExpr  ::= PrimaryExpr | unary_op UnaryExpr
-
 binary_op  ::= LOR | LAND | rel_op | add_op | mul_op;
 rel_op     ::= IGUAL | DIFERENTE | MENOR_QUE | MENOR_IGUAL | MAIOR_QUE | MAIOR_IGUAL;
 add_op     ::= SOMA | SUBTRACAO | OR | XOR ;
 mul_op     ::= MULTIPLICACAO | DIVISAO | RESTO | SHIFT_LEFT | SHIFT_RIGHT | AND_NOT | AND ;
 
 unary_op   ::= SOMA | SUBTRACAO | NOT | XOR | MULTIPLICACAO | AND | ARROW; 
+
+Expression ::= UnaryExpr | Expression binary_op Expression;
+UnaryExpr  ::= PrimaryExpr | unary_op UnaryExpr
+
+PrimaryExpr ::=  Operand |
+                 Conversion |
+				 MethodExpr |
+				 PrimaryExpr Selector |
+				 PrimaryExpr Index |
+				 PrimaryExpr Slice |
+				 PrimaryExpr TypeAssertion |
+				 PrimaryExpr Arguments;
+
+Operand     = Literal | OperandName | "(" Expression ")" ;
+Literal     = BasicLit | CompositeLit | FunctionLit ;
+BasicLit    ::= ID | BOOL | FLOAT | INTEIRO;
+OperandName ::= identifier | QualifiedIdent;
+
+QualifiedIdent ::= PackageName PONTO identifier ;
 
 
 FunctionType   ::= "func" Signature ;
@@ -61,12 +77,6 @@ Parameters     = "(" [ ParameterList [ "," ] ] ")" ;
 ParameterList  = ParameterDecl { "," ParameterDecl } ;
 ParameterDecl  = [ IdentifierList ] [ "..." ] Type ;
 
-Operand     = Literal | OperandName | "(" Expression ")" ;
-Literal     = BasicLit | CompositeLit | FunctionLit ;
-BasicLit    ::= ID | BOOL | FLOAT | INTEIRO;
-OperandName ::= identifier | QualifiedIdent;
-
-QualifiedIdent ::= PackageName PONTO identifier ;
 
 PackageClause  ::= PACKAGE PackageName ;
 PackageName    ::= identifier ;
@@ -76,15 +86,6 @@ ImportSpec       ::= CHAVEESQ PONTO | PackageName CHAVEDIR ImportPath ;
 ImportPath       ::= ID ;
 
 
-PrimaryExpr ::=  Operand |
-                 Conversion |
-				 MethodExpr |
-				 PrimaryExpr Selector |
-				 PrimaryExpr Index |
-				 PrimaryExpr Slice |
-				 PrimaryExpr TypeAssertion |
-				 PrimaryExpr Arguments .
-
 Selector       = "." identifier .
 Index          = "[" Expression "]" .
 Slice          = "[" [ Expression ] ":" [ Expression ] "]" |
@@ -93,12 +94,15 @@ TypeAssertion  = "." "(" Type ")" .
 Arguments      = "(" [ ( ExpressionList | Type [ "," ExpressionList ] ) [ "..." ] [ "," ] ] ")" .
 
 
-FunctionType   = "func" Signature .
-Signature      = Parameters [ Result ] .
-Result         = Parameters | Type .
-Parameters     = "(" [ ParameterList [ "," ] ] ")" .
-ParameterList  = ParameterDecl { "," ParameterDecl } .
-ParameterDecl  = [ IdentifierList ] [ "..." ] Type .
+FunctionType   ::= FUNC Signature ;
+Signature      ::= Parameters CHAVEESQ Result CHAVEDIR;
+Result         ::= Parameters | Type ;
+Parameters     ::= PARENESQ CHAVEESQ ParameterList CHAVEESQ VIRGULA CHAVEDIR CHAVEDIR PARENDIR;
+ParameterList  ::= ParameterDecl COLCHESQ VIRGULA ParameterDecl COLCHDIR;
+ParameterDecl  ::= CHAVEESQ IdentifierList CHAVEDIR CHAVEESQ CHAVEDIR Type;
+
+Type      ::= TypeName | PARENESQ Type PARENDIR;
+TypeName  ::= identifier | QualifiedIdent;
 
 
 

@@ -39,7 +39,7 @@ non terminal   Operand, Literal , BasicLit, CompositeLit ,FunctionLit;
 
 
 
-/* The grammar rules */
+/*                     The grammar rules                    */
 
 identifier ::= ID ;
 
@@ -62,20 +62,47 @@ PrimaryExpr ::=  Operand |
 				 PrimaryExpr TypeAssertion |
 				 PrimaryExpr Arguments;
 
-Operand     = Literal | OperandName | "(" Expression ")" ;
-Literal     = BasicLit | CompositeLit | FunctionLit ;
+Operand     ::= Literal | OperandName | PARENESQ Expression PARENDIR ;
+Literal     ::= BasicLit | CompositeLit | FunctionLit ;
 BasicLit    ::= ID | BOOL | FLOAT | INTEIRO;
 OperandName ::= identifier | QualifiedIdent;
 
 QualifiedIdent ::= PackageName PONTO identifier ;
 
+CompositeLit  ::= LiteralType LiteralValue;
+LiteralType   ::= StructType | ArrayType | CHAVEESQ ELLIPSIS CHAVEDIR ElementType |
+                 TypeName;
+LiteralValue  ::= COLCHESQ CHAVEESQ ElementList CHAVEESQ VIRGULA CHAVEDIR CHAVEDIR COLCHDIR;
+ElementList   ::= KeyedElement COLCHESQ VIRGULA KeyedElement COLCHDIR;
+KeyedElement  ::= CHAVEESQ Key DOISPONTOS CHAVEDIR Element;
+Key           ::= FieldName | Expression | LiteralValue ;
+FieldName     ::= identifier ;
+Element       ::= Expression | LiteralValue;
+
+StructType    ::= STRUCT COLCHESQ FieldDecl PONTOVIRGULA COLCHDIR;
+FieldDecl     ::= IdentifierList Type | EmbeddedField [ Tag ] ;
+EmbeddedField = [ "*" ] TypeName ;
+Tag           = string_lit .
+
+string_lit             ::= raw_string_lit | interpreted_string_lit;
+raw_string_lit         ::= "`" { unicode_char | newline } "`" ;
+interpreted_string_lit ::= `"` { unicode_value | byte_value } `"` ;
+
+/*Constant declarations*/
+
+ConstDecl      ::= CONST  ConstSpec | CONST PARENESQ  ConstSpec PONTOVIRGULA PARENDIR;
+ConstSpec      ::= IdentifierList ATRIBUICAO ExpressionList;
+
+IdentifierList ::= identifier VIRGULA identifier; 
+ExpressionList ::= Expression VIRGULA Expression;
+
 
 FunctionType   ::= "func" Signature ;
-Signature      = Parameters [ Result ] ;
+Signature      ::= Parameters  Result ;
 Result         = Parameters | Type ;
-Parameters     = "(" [ ParameterList [ "," ] ] ")" ;
+Parameters     = PARENESQ ParameterList VIRGULA  PARENDIR ;
 ParameterList  = ParameterDecl { "," ParameterDecl } ;
-ParameterDecl  = [ IdentifierList ] [ "..." ] Type ;
+ParameterDecl  = [ IdentifierList ] [ ELLIPSIS ] Type ;
 
 
 PackageClause  ::= PACKAGE PackageName ;
@@ -86,13 +113,14 @@ ImportSpec       ::= CHAVEESQ PONTO | PackageName CHAVEDIR ImportPath ;
 ImportPath       ::= ID ;
 
 
-Selector       = "." identifier .
-Index          = "[" Expression "]" .
+Selector       ::= PONTO identifier ;
+Index          ::= CHAVEESQ Expression CHAVEDIR ;
 Slice          = "[" [ Expression ] ":" [ Expression ] "]" |
                  "[" [ Expression ] ":" Expression ":" Expression "]" .
 TypeAssertion  = "." "(" Type ")" .
 Arguments      = "(" [ ( ExpressionList | Type [ "," ExpressionList ] ) [ "..." ] [ "," ] ] ")" .
 
+/*            função    */
 
 FunctionType   ::= FUNC Signature ;
 Signature      ::= Parameters CHAVEESQ Result CHAVEDIR;
@@ -101,8 +129,97 @@ Parameters     ::= PARENESQ CHAVEESQ ParameterList CHAVEESQ VIRGULA CHAVEDIR CHA
 ParameterList  ::= ParameterDecl COLCHESQ VIRGULA ParameterDecl COLCHDIR;
 ParameterDecl  ::= CHAVEESQ IdentifierList CHAVEDIR CHAVEESQ CHAVEDIR Type;
 
+
+/*    tipos      */
 Type      ::= TypeName | PARENESQ Type PARENDIR;
 TypeName  ::= identifier | QualifiedIdent;
 
+IdentifierList ::= identifier VIRGULA identifier; 
+ExpressionList ::= Expression VIRGULA Expression;
 
+
+/*   Declarations and scope */
+
+Declaration   ::= ConstDecl | TypeDecl | VarDecl ;
+TopLevelDecl  ::= Declaration | FunctionDecl | MethodDecl;
+
+/*   Constant declarations   */
+
+ConstDecl      ::= CONST  ConstSpec | CONST PARENESQ  ConstSpec PONTOVIRGULA PARENDIR;
+ConstSpec      ::= IdentifierList ATRIBUICAO ExpressionList;
+
+
+/*   Type declarations    */
+
+TypeDecl  ::= TYPE  TypeSpec | PARENESQ  TypeSpec PONTOVIRGULA  PARENDIR;
+TypeSpec  ::= AliasDecl | TypeDef ;
+AliasDecl ::= identifier IGUAL Type ;
+TypeDef   ::= identifier Type ;
+
+
+/*      Variable declarations           */
+
+VarDecl     ::= VAR VarSpec | PARENESQ  VarSpec PONTOVIRGULA  PARENDIR ;
+VarSpec     ::= IdentifierList Type IGUAL ExpressionList | IGUAL ExpressionList;
+
+
+/*   Function declarations      */
+
+FunctionDecl ::= FUNC FunctionName Signature  FunctionBody ;
+FunctionName ::= identifier ;
+FunctionBody ::= Block ;
+
+Block ::= COLCHESQ StatementList COLCHDIR;
+StatementList ::=  Statement PONTOVIRGULA ;
+
+
+/*     Statements    */
+
+Statement ::=   Declaration | LabeledStmt | SimpleStmt |
+                GoStmt | ReturnStmt | BreakStmt | ContinueStmt | GotoStmt |
+				FallthroughStmt | Block | IfStmt | SwitchStmt | SelectStmt | ForStmt |
+				DeferStmt;
+
+SimpleStmt ::= EmptyStmt | ExpressionStmt | SendStmt | IncDecStmt | Assignment | ShortVarDecl ;
+
+ExpressionStmt ::= Expression;
+ReturnStmt ::= RETURN  ExpressionList;
+
+LabeledStmt ::= Label DOISPONTOS Statement ;
+Label       ::= identifier;
+
+GoStmt ::= GO Expression ;
+BreakStmt ::= BREAK  Label;
+GotoStmt ::= GOTO Label;
+FallthroughStmt ::= FALLTHROUGH ;
+DeferStmt       ::= DEFER Expression ;
+
+IfStmt     ::= IF [ SimpleStmt PONTOVIRGULA ] Expression Block [ ELSE ( IfStmt | Block ) ] ;
+
+IncDecStmt ::= Expression ( INC | DEC ) ;
+EmptyStmt  ::= ;
+SendStmt   ::= Channel ARROW Expression .
+Channel    ::= Expression ;
+Assignment ::= ExpressionList assign_op ExpressionList;
+assign_op  ::= [ add_op | mul_op ] IGUAL ;
+ShortVarDecl ::= IdentifierList DEFINE ExpressionList;
+ExpressionStmt ::= Expression ;
+
+
+
+/*   For statements */
+
+
+ForStmt   ::= FOR [ Condition | ForClause | RangeClause ] Block;
+Condition ::= Expression ;
+
+ForClause ::= [ InitStmt ] PONTOVIRGULA [ Condition ] PONTOVIRGULA [ PostStmt ] ;
+InitStmt  ::= SimpleStmt ;
+PostStmt  ::= SimpleStmt ;
+
+RangeClause ::= [ ExpressionList IGUAL | IdentifierList DEFINE ] RANGE Expression ;
+
+
+
+ 
 

@@ -68,6 +68,8 @@ VIRGULA = ","
 PONTO = "."
 DOISPONTOS = ":"
 PONTOVIRGULA = ";"
+APOSTROFO = "`"
+ASPAS = """
 
 BREAK = "break"
 CASE = "case"
@@ -142,7 +144,6 @@ EOF = "EOF"
 
 BRANCO = [\n| |\t|\r]
 BOOL = (true|false)
-COMPLEX = ([-+]?\d+\.?\d*|[-+]?\d*\.?\d+)\s*\+\s*([-+]?\d+\.?\d*|[-+]?\d*\.?\d+)i
 INTEIRO = [+-]?[1-9][0-9]*
 FLOAT = [+-]?(0|[1-9]*[.])?[0-9]+
 ID = [_|a-z|A-Z][a-z|A-Z|0-9|_]*
@@ -203,6 +204,8 @@ ID = [_|a-z|A-Z][a-z|A-Z|0-9|_]*
 {PONTO}                     { imprimir("Caractere ponto", yytext()); }
 {DOISPONTOS}                     { imprimir("Caractere dois pontos", yytext()); }
 {PONTOVIRGULA}                     { imprimir("Caractere ponto e virgula", yytext()); }
+{APOSTROFO}                     { imprimir("Caractere apostrofo", yytext()); }
+{ASPAS}                     { imprimir("Caractere aspas", yytext()); }
 
 {BREAK}                     { imprimir("Palavra reservada break", yytext()); }
 {CASE}                     { imprimir("Palavra reservada case", yytext()); }
@@ -275,7 +278,6 @@ ID = [_|a-z|A-Z][a-z|A-Z|0-9|_]*
 {FINALCOMENT} = "*/"                     { imprimir("Final do comentario", yytext()); }
 {EOF} = "EOF"                     { imprimir("Palavra reservada EOF var", yytext()); }
 
-{COMPLEX}                     { imprimir("Número Complexo", yytext()); }
 {INTEIRO}                     { imprimir("Número Inteiro", yytext()); }
 {FLOAT}                     { imprimir("Número Float", yytext()); }
 {BOOL}                     { imprimir("Valor boolean", yytext()); }

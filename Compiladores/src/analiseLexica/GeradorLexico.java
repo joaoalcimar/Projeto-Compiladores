@@ -4,6 +4,11 @@ import java.io.File;
 import java.nio.file.Paths;
 
 public class GeradorLexico {
+	
+	public static void geraLexer(String path){
+	    File arquivo = new File(path);
+	    jflex.Main.generate(arquivo);
+	}
 
     public static void main(String[] args) {
 
@@ -12,9 +17,6 @@ public class GeradorLexico {
 
         String file = rootPath + subPath + "Linguagem.lex";
 
-        File sourceCode = new File(file);
-
-        jflex.Main.generate(sourceCode);
-
+        geraLexer(file);
     }
 }

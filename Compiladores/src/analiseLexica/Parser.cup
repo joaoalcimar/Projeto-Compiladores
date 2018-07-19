@@ -3,6 +3,7 @@
    parser evaluates constant expressions on the fly
 */
 
+
 package cup.example;
 
 import java_cup.runtime.*;
@@ -79,7 +80,7 @@ non terminal   IfStmt, IncDecStmt, EmptyStmt, SendStmt, Channel, Assignment, ass
 
 /*                     The grammar rules                    */
 
-identifier ::= ID ;
+identifier ::= ID:id {:RESULT = id;:}; 
 
 binary_op  ::= LOR | LAND | rel_op | add_op | mul_op;
 rel_op     ::= IGUAL | DIFERENTE | MENOR_QUE | MENOR_IGUAL | MAIOR_QUE | MAIOR_IGUAL;
@@ -93,7 +94,10 @@ UnaryExpr  ::= PrimaryExpr | unary_op UnaryExpr;
 
 Operand     ::= Literal | OperandName | PARENESQ Expression PARENDIR ;
 Literal     ::= BasicLit | CompositeLit | FunctionLit ;
-BasicLit    ::= ID | BOOL | FLOAT | INTEIRO;
+BasicLit    ::= ID:id 	{: RESULT = new Variable(id.toString(), null, "String", id); :}
+              | BOOL 
+			  | FLOAT: fl 	{: RESULT = new Variable(fl.toString(), null, "floating_literal", fl); :}
+			  | INTEIRO;
 OperandName ::= identifier | QualifiedIdent;
 
 QualifiedIdent ::= PackageName PONTO identifier ;

@@ -8,9 +8,9 @@ import java_cup.runtime.*;
 import java.io.IOException;
 import java.io.File;
 import java.io.FileInputStream;
+import analiseSemantica.*;
 
-parser code
-{:
+parser code{:
     private Symbol s;  //s recebe o Symbol da classe Symbol
     
     public static void main(String args[]) throws Exception{
@@ -79,7 +79,7 @@ non terminal   IfStmt, IncDecStmt, EmptyStmt, SendStmt, Channel, Assignment, ass
 
 /*  ######## identificador ###########  */
 
-identifier ::= ID ;
+identifier ::= ID:id {:RESULT = id;:};
 
 binary_op  ::= LOR | LAND | rel_op | add_op | mul_op;
 rel_op     ::= IGUAL | DIFERENTE | MENOR_QUE | MENOR_IGUAL | MAIOR_QUE | MAIOR_IGUAL;
@@ -88,13 +88,27 @@ mul_op     ::= MULTIPLICACAO | DIVISAO | RESTO | SHIFT_LEFT | SHIFT_RIGHT | AND_
 
 unary_op   ::= SOMA | SUBTRACAO | NOT | XOR | MULTIPLICACAO | AND | ARROW; 
 
-Expression ::= UnaryExpr | Expression binary_op Expression;
-UnaryExpr  ::= PrimaryExpr | unary_op UnaryExpr;
+/*  ######## Expression ###########  */
+Expression ::= UnaryExpr 
+             | Expression:e1 binary_op:op Expression:e2 {: :};
+             | Expression:e1 SOMA:s Expression:e2 {:System.out.println(RESULT + "  ");:} {: RESULT = SemanticAnalyzer.checkAdditiveExp(e2.toString(), s, e1);:};
+             | Expression:e1 SUBTRACAO:su Expression:e2 {: :};
+             | Expression:e1 MULTIPLICACAO:mul Expression:e2 {: :};
+             | Expression:e1 DIVISAO:di Expression:e2 {: :};                                           
+                                  
+             
+UnaryExpr  ::= unary_op UnaryExpr;
 
+/*  ######## operadores ###########  */
 Operand     ::= Literal | OperandName | PARENESQ Expression PARENDIR ;
 Literal     ::= BasicLit | CompositeLit | FunctionLit ;
-BasicLit    ::= ID | BOOL | FLOAT | INTEIRO;
-OperandName ::= identifier | QualifiedIdent;
+BasicLit    ::= ID:sl       {: RESULT = new Variable(sl.toString(), null, "string_literal", sl); :}
+              | BOOL:boo    {: RESULT = new Variable(t.toString(), null, "bool_literal", boo); :} 
+              | FLOAT : fl 	{: RESULT = new Variable(fl.toString(), null, "floating_literal", fl); :}
+              | INTEIRO: il {: RESULT = new Variable(il.toString(), null, "integer_literal", il); :};
+              
+OperandName ::= identifier 
+              | QualifiedIdent;
 
 QualifiedIdent ::= PackageName PONTO identifier ;
 
@@ -135,21 +149,21 @@ ParameterDecl  ::= CHAVEESQ IdentifierList CHAVEDIR CHAVEESQ ELLIPSIS CHAVEDIR T
 
 
 PackageClause  ::= PACKAGE PackageName ;
-PackageName    ::= identifier ;
+PackageName    ::= identifier:id {:RESULT = id;:} ;
 
 ImportDecl       ::= IMPORT PARENESQ ImportSpec | PARENESQ COLCHESQ ImportSpec PONTOVIRGULA COLCHDIR  PARENDIR PARENDIR;
 ImportSpec       ::= CHAVEESQ PONTO | PackageName CHAVEDIR ImportPath ;
 ImportPath       ::= ID ;
 
 
-Selector       ::= PONTO identifier ;
+Selector       ::= PONTO identifier :id {:RESULT = id;:} ;
 Index          ::= CHAVEESQ Expression CHAVEDIR ;
 Slice          ::= CHAVEESQ CHAVEESQ Expression CHAVEDIR DOISPONTOS CHAVEESQ Expression CHAVEDIR CHAVEDIR |
                  CHAVEESQ CHAVEESQ Expression CHAVEDIR DOISPONTOS Expression DOISPONTOS Expression CHAVEDIR ;
 TypeAssertion  ::= PONTO PARENESQ Type PARENDIR ;
 Arguments      ::= PARENESQ CHAVEESQ PARENESQ ExpressionList | Type CHAVEESQ VIRGULA ExpressionList CHAVEDIR PARENDIR CHAVEESQ ELLIPSIS CHAVEDIR CHAVEESQ VIRGULA CHAVEDIR CHAVEDIR PARENDIR ;
 
-/*            função    */
+/*  ############## funcao ##############    */
 
 FunctionType   ::= FUNC Signature ;
 Signature      ::= Parameters CHAVEESQ Result CHAVEDIR;

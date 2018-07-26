@@ -7,7 +7,7 @@ public class TestadorLexico {
 
     public static void main(String[] args) throws IOException {
 
-        String expr2 = "-34i + 52 + 5i * 942 - 32i / 5 == B >= 4.433333 * 42+5321i ! true";
+        String expr2 = "-34 + 52 + 5.565632 * 942 - 32 / 5 == B >= a43434.433333 * ! true";
 
         AnalisadorLexico lexical2 = new AnalisadorLexico(new StringReader(expr2));
         lexical2.yylex();

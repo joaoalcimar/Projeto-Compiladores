@@ -5,6 +5,7 @@ import cup.example.Lexer;
 import java.io.IOException;
 import java.io.File;
 import java.io.FileInputStream;
+import semantica.*;
 
 // parser code {: public Parser (java.io.Reader input) { super(new Yylex(input)); } :};
 
@@ -202,15 +203,19 @@ start with SourceFile;
 
 // ############################################### TYPE RULES #######################################################
 
-Type      ::= TypeName | TypeLit | open_brac Type close_brac;
-// TypeName ::= QualifiedIdent | identifier;
-TypeName  ::= B | C; // QualifiedIdent
-B ::= C dot identifier;
-C ::= identifier;
-TypeLit   ::= ArrayType | PointerType | FunctionType;// | SliceType ; //  StructType 
+Type      ::= TypeName:t {: RESULT = new Tipo(t); :}
+            | TypeLit:tl {:RESULT = new Tipo(tl);:}
+            | open_brac Type:t close_brac {: RESULT = t; :};
+
+TypeName  ::= B:b {:RESULT = new TipoNome(b);:}
+            | C:c {:RESULT = new TipoNome(c);:};
+
+B ::= C:c dot identifier:i {: RESULT = c+"."+i; :};
+
+TypeLit   ::=ArrayType | PointerType| FunctionType:ft ;     // | SliceType ; //  StructType
 
 ArrayType   ::= open_square_brac ArrayLength close_square_brac Type;
-ArrayLength ::= Expression;
+ArrayLength ::= int_lit:i {: RESULT =  new Integer(Integer.parseInt( i )); :};
 //ElementType ::= Type;
 
 //SliceType ::= open_square_brac close_square_brac Type;
@@ -231,24 +236,36 @@ PointerType ::= star_op Type; //DOUBT
 
 Func_call ::= TypeName open_brac close_brac | TypeName open_brac ExpressionList  close_brac;
 
-FunctionType   ::= funcd Signature;
-Signature      ::= Parameters Parameters | Parameters Type | Parameters;
+FunctionType   ::= funcd Signature:s {: RESULT = s;:};
+Signature      ::=  Parameters:p1 Parameters:p2 {: RESULT = new Assinatura(p1,p2); :}
+                 | Parameters:p1 Type:t {: RESULT = new Assinatura(p1,t); :}
+                 | Parameters:p1 {: RESULT = new Assinatura(p1); :};
+
 //Signature      ::= Parameters Signature_unnecessary_1;
 //Signature_unnecessary_1 ::= Result | ;
 // Result         ::= Parameters | Type ;
-Parameters     ::= open_brac ParameterList comma close_brac | open_brac ParameterList close_brac | open_brac close_brac;
+
+Parameters     ::= open_brac ParameterList comma close_brac
+                 | open_brac ParameterList close_brac
+                 | open_brac close_brac;
+
 //Parameters     ::= open_brac Parameters_unnecessary_2 close_brac;
 //Parameters_unnecessary_1 ::= comma | ;
 //Parameters_unnecessary_2 ::= ParameterList comma | ParameterList | ;
 //Parameters_unnecessary_2 ::= ParameterList Parameters_unnecessary_1 | ;
-ParameterList  ::= ParameterDecl ParameterList_unnecessary_1;
-ParameterList_unnecessary_1 ::= ParameterList_unnecessary_1 comma ParameterDecl | ;
+
+ParameterList  ::= PParameterDecl:pd ParameterList_unnecessary_1:pl {: pl.addFirst(pd); RESULT = pl; :};
+ParameterList_unnecessary_1 ::= ParameterList_unnecessary_1:pl1 comma ParameterDecl:pd  {: pl1.add(pd); RESULT = pl1; :}
+                                                                | {: RESULT = new LinkedList<>(); :};
+                                                                | {: RESULT = new LinkedList<DeclaracaoDeParametro>(); :};
 
 // ParameterList  ::= ParameterDecl ParameterList_unnecessary_1;
 // ParameterList_unnecessary_1 ::= comma ParameterList | ;
 
 
-ParameterDecl  ::= IdentifierList Type | Type; // | IdentifierList tri_dot Type | tri_dot Type 
+ParameterDecl  ::=IdentifierList:i1 Type:t {: RESULT = new DeclaracaoDeParamentro(i1, t); :}
+                | Type:t {: RESULT = new DeclaracaoDeParamentro(t); :}; // | IdentifierList tri_dot Type | tri_dot Type
+
 /*ParameterDecl  ::=  ParameterDecl_unnecessary_1 ParameterDecl_unnecessary_2 Type;
 ParameterDecl_unnecessary_1 ::= IdentifierList | ;
 ParameterDecl_unnecessary_2 ::= tri_dot | ;*/
@@ -268,7 +285,9 @@ TopLevelDecl  ::= FunctionDecl | Declaration  ;
 
 FunctionDecl ::= funcd identifier FunctionDecl_unnecessary_1;
 FunctionDecl_unnecessary_1 ::= Function | Signature;
+
 //FunctionName ::= identifier;
+
 Function     ::= Signature FunctionBody;
 FunctionBody ::= Block;
 
@@ -287,13 +306,16 @@ ConstSpec_unnecessary_2 ::= ConstSpec_unnecessary_1 equal ExpressionList | ;
 
 // IdentifierList ::= IdentifierList_unnecessary_1;
 // IdentifierList_unnecessary_1 ::= IdentifierList_unnecessary_1_dash identifier | identifier;
-IdentifierList ::= identifier IdentifierList_unnecessary_1;
-IdentifierList_unnecessary_1 ::= comma IdentifierList | ;
+
+IdentifierList ::= identifier:i IdentifierList_unnecessary_1:i1 {: i1.addFirst(i); RESULT = i1; :};
+IdentifierList_unnecessary_1 ::= comma Identifier:i IdentifierList_unnecessary_1:i1  {: i1.addFirst(i); RESULT = i1; :}
+                               | {: RESULT = new LinkedList<String>(); :};
 
 
 
-ExpressionList ::= Expression ExpressionList_unnecessary_1;
-ExpressionList_unnecessary_1 ::= ExpressionList_unnecessary_1 comma Expression | ;
+ExpressionList ::= Expression:ex ExpressionList_unnecessary_1:eu {: eu.addFirst(ex); RESULT = eu; :};
+ExpressionList_unnecessary_1 ::= ExpressionList_unnecessary_1:eu comma Expression:ex {: eu.add(ex); RESULT = eu; :}
+                                | {: RESULT = new LinkedList<Expressoes>(); :};
 
 /*TypeDecl     ::= type TypeDecl_unnecessary_2;
 TypeDecl_unnecessary_1 ::= TypeDecl_unnecessary_1 TypeSpec semicolon | ;
@@ -305,7 +327,9 @@ VarDecl     ::= var VarDecl_unnecessary_2;
 VarDecl_unnecessary_1 ::= VarDecl_unnecessary_1 VarSpec semicolon | ;
 VarDecl_unnecessary_2 ::= VarSpec | open_brac VarDecl_unnecessary_1 close_brac;
 VarSpec     ::= IdentifierList VarSpec_unnecessary_2; //************DOUBT "="
-VarSpec_unnecessary_1 ::= equal ExpressionList | ;
+
+VarSpec_unnecessary_1 ::=equal ExpressionList:el {: RESULT = el; :}
+                                                   | {: RESULT = new LinkedList<Expressoes>(); :} ;
 VarSpec_unnecessary_2 ::= Type VarSpec_unnecessary_1 | equal ExpressionList;
 
 //ShortVarDecl ::= IdentifierList short_ass ExpressionList;
@@ -319,7 +343,22 @@ VarSpec_unnecessary_2 ::= Type VarSpec_unnecessary_1 | equal ExpressionList;
 Operand     ::= BasicLit | ArrayType LiteralValue | TypeName LiteralValue | TypeName | open_brac Expression close_brac;
 //Operand_unnecessary_1_dash ::= LiteralValue | ;
 //Literal     ::= BasicLit | ArrayType LiteralValue | TypeName LiteralValue;// | FunctionLit;
-BasicLit    ::= int_lit | float_lit | imaginary_lit | rune_lit | string_lit;
+
+BasicLit    ::= int_lit:il {:Map a = new HashMap();
+                             a.put("Type", "int");
+                             a.put("value", il);
+                             RESULT = a;  :}
+              | float_lit:fl{:Map a = new HashMap();
+                              a.put("Type", "float");
+                              a.put("value", fl);
+                              RESULT = a;  :}
+              | imaginary_lit
+              | rune_lit
+              | string_lit:sl {:Map a = new HashMap();
+                                a.put("Type", "string");
+                                a.put("value", sl);
+                                RESULT = a; :} ;;
+
 //OperandName ::= identifier QualifiedIdent_dash ;
 
 // QualifiedIdent ::= identifier dot identifier;
@@ -328,6 +367,7 @@ BasicLit    ::= int_lit | float_lit | imaginary_lit | rune_lit | string_lit;
 
 //CompositeLit  ::= ArrayType LiteralValue | TypeName LiteralValue;
 // LiteralType   ::= ArrayType | TypeName;// |  SliceType; // StructType |  open_square_brac tri_dot close_square_brac Type | 
+
 LiteralValue  ::= open_curly_brac LiteralValue_unnecessary_2 close_curly_brac;
 LiteralValue_unnecessary_1 ::= comma | ;
 LiteralValue_unnecessary_2 ::= ElementList LiteralValue_unnecessary_1 | ;
@@ -336,10 +376,12 @@ ElementList   ::= Element ElementList_unnecessary_1;
 ElementList_unnecessary_1 ::= ElementList_unnecessary_1 comma Element | ;
 //Element       ::= identifier colon Expression | Expression colon Expression | identifier colon LiteralValue | Expression colon LiteralValue | Expression | LiteralValue;
 Element       ::= identifier colon Value | Expression colon Value | Value;
+
 //Element_unnecessary_1 ::= Key colon | ;
 //Key           ::= identifier | Expression;
 //FieldName     ::= identifier;
 //ElementIndex  ::= Expression;
+
 Value         ::= Expression | LiteralValue;
 
 //FunctionLit ::= funcd Function;
@@ -377,15 +419,42 @@ Arguments_unnecessary_5 ::= Arguments_unnecessary_4 Arguments_unnecessary_2 Argu
 // ############################################### OPERATORS RULES #######################################################
 
 
-Expression ::= UnaryExpr Expression_unneccessary_1_dash;
+Expression ::= UnaryExpr:u Expression_unneccessary_1_dash:e1 {: Result= new Expression(u,e1);:};
 Expression_unneccessary_1_dash ::= binary_op UnaryExpr Expression_unneccessary_1_dash | ;
 UnaryExpr  ::= PrimaryExpr | unary_op UnaryExpr;
 
-binary_op  ::= or_op | and_op | rel_op | add_op | mul_op;
-rel_op     ::= equal_equal_op | not_equal_op | less_op | less_equal_op | greater_op | greater_equal_op; // "==" | "!=" | "<" | "<=" | ">" | ">="
-add_op     ::= plus_op | minus_op | pipe_op | pow_op; // "+" | "-" | "|" | "^"
-mul_op     ::= star_op | div_op | mod_op | left_shift_op | right_shift_op | amp_op | amp_pow_op; // "*" | "/" | "%" | "<<" | ">>" | "&" | "&^"
-unary_op   ::= plus_op | minus_op | not_op | pow_op | star_op | amp_op; // "+" | "-" | "!" | "^" | "*" | "&" | "<-"
+binary_op  ::= or_op:or   {: RESULT = "||"; :}
+             | and_op:and {: RESULT = "&&"; :}
+             | rel_op:rel {: RESULT = rel; :}
+             | add_op:add {: RESULT = add; :}
+             | mul_op:mul {: RESULT = mul; :};;
+
+rel_op     ::=equal_equal_op:ee {: RESULT = "=="; :}
+              | not_equal_op:ne {: RESULT = "!="; :}
+              | less_op:lo {: RESULT = "<"; :}
+              | less_equal_op:le {: RESULT = "<="; :}
+              | greater_op:go {: RESULT = ">"; :}
+              | greater_equal_op:ge {: RESULT = ">="; :};  // "==" | "!=" | "<" | "<=" | ">" | ">=" // "==" | "!=" | "<" | "<=" | ">" | ">="
+
+dd_op     ::= plus_op:p {: RESULT = "+"; :}
+              | minus_op:m {: RESULT = "-"; :}
+              | pipe_op:p {: RESULT = "|"; :}
+              | pow_op:p {: RESULT = "^"; :}; // "+" | "-" | "|" | "^"
+
+mul_op     ::= star_op:s {: RESULT = "*"; :}
+              | div_op:d {: RESULT = "/"; :}
+              | mod_op:m {: RESULT = "%"; :}
+              | left_shift_op:ls {: RESULT = "<<"; :}
+              | right_shift_op:rs {: RESULT = ">>"; :}
+              | amp_op:a {: RESULT = "&"; :}
+              | amp_pow_op:a {: RESULT = "&^"; :}; // "*" | "/" | "%" | "<<" | ">>" | "&" | "&^"
+
+unary_op   ::= plus_op:p {: RESULT = "+"; :}
+              | minus_op:m {: RESULT = "-"; :}
+              | not_op:n {: RESULT = "!"; :}
+              | pow_op:p {: RESULT = "^"; :}
+              | star_op:s {: RESULT = "*"; :}
+              | amp_op:a {: RESULT = "&"; :} ; // "+" | "-" | "!" | "^" | "*" | "&" | "<-"
 
 
 //refer to order of evaluation for ambiguity resolution maybe

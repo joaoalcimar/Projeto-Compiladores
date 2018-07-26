@@ -162,128 +162,128 @@ ID = [_|a-z|A-Z][a-z|A-Z|0-9|_]*
 {SHIFT_RIGHT}                     {return symbol(sym.SHIFT_RIGHT);}
 {AND_NOT}                     {return symbol(sym.AND_NOT);}
 
-{ATRIBUICAO_SOMA}                     {return symbol(sym.AND_NOT);}
-{ATRIBUICAO_SUB}                     {return symbol(sym.AND_NOT);}
-{ATRIBUICAO_MULT}                     {return symbol(sym.AND_NOT);}
-{ATRIBUICAO_DIV}                     {return symbol(sym.AND_NOT);}
-{ATRIBUICAO_RESTO}                     {return symbol(sym.AND_NOT);}
+{ATRIBUICAO_SOMA}                     {return symbol(sym.ATRIBUICAO_SOMA);}
+{ATRIBUICAO_SUB}                     {return symbol(sym.ATRIBUICAO_SUB);}
+{ATRIBUICAO_MULT}                     {return symbol(sym.ATRIBUICAO_MULT);}
+{ATRIBUICAO_DIV}                     {return symbol(sym.ATRIBUICAO_DIV);}
+{ATRIBUICAO_RESTO}                     {return symbol(sym.ATRIBUICAO_RESTO);}
 
-{ATRIBUICAO_AND}                    {return symbol(sym.AND_NOT);}
-{ATRIBUICAO_OR}                     {return symbol(sym.AND_NOT);}
+{ATRIBUICAO_AND}                    {return symbol(sym.ATRIBUICAO_AND);}
+{ATRIBUICAO_OR}                     {return symbol(sym.ATRIBUICAO_OR);}
 {ATRIBUICAO_XOR}                    {return symbol(sym.AND_NOT);}
-{ATRIBUICAO_SL}                     {return symbol(sym.AND_NOT);}
-{ATRIBUICAO_SR}                     {return symbol(sym.AND_NOT);}
-{ATRICUICAO_AND_NOT}                {return symbol(sym.AND_NOT);}
+{ATRIBUICAO_SL}                     {return symbol(sym.ATRIBUICAO_XOR);}
+{ATRIBUICAO_SR}                     {return symbol(sym.ATRIBUICAO_SR);}
+{ATRICUICAO_AND_NOT}                {return symbol(sym.ATRICUICAO_AND_NOT);}
 
-{LAND}                     {return symbol(sym.AND_NOT);}
-{LOR}                    {return symbol(sym.AND_NOT);}
-{ARROW}                    {return symbol(sym.AND_NOT);}
-{INC}                     {return symbol(sym.AND_NOT);}
-{DEC}                     {return symbol(sym.AND_NOT);}
+{LAND}                     {return symbol(sym.LAND);}
+{LOR}                    {return symbol(sym.LOR);}
+{ARROW}                    {return symbol(sym.ARROW);}
+{INC}                     {return symbol(sym.INC);}
+{DEC}                     {return symbol(sym.DEC);}
 
-{IGUAL}                     {return symbol(sym.AND_NOT);}
-{MAIOR_QUE}                     {return symbol(sym.AND_NOT);}
-{MENOR_QUE}                     {return symbol(sym.AND_NOT);}
-{ATRIBUICAO}                     {return symbol(sym.AND_NOT);}
-{NOT}                     {return symbol(sym.AND_NOT);}
+{IGUAL}                     {return symbol(sym.IGUAL);}
+{MAIOR_QUE}                     {return symbol(sym.MAIOR_QUE);}
+{MENOR_QUE}                     {return symbol(sym.MENOR_QUE);}
+{ATRIBUICAO}                     {return symbol(sym.ATRIBUICAO);}
+{NOT}                     {return symbol(sym.NOT);}
 
-{DIFERENTE}                     {return symbol(sym.AND_NOT);}
-{MENOR_IGUAL}                    {return symbol(sym.AND_NOT);}
-{MAIOR_IGUAL}                     {return symbol(sym.AND_NOT);}
-{DEFINE}                    {return symbol(sym.AND_NOT);}
-{ELLIPSIS}                    {return symbol(sym.AND_NOT);}
+{DIFERENTE}                     {return symbol(sym.DIFERENTE);}
+{MENOR_IGUAL}                    {return symbol(sym.MENOR_IGUAL);}
+{MAIOR_IGUAL}                     {return symbol(sym.MAIOR_IGUAL);}
+{DEFINE}                    {return symbol(sym.DEFINE);}
+{ELLIPSIS}                    {return symbol(sym.ELLIPSIS);}
 
-{PARENESQ}                    {return symbol(sym.AND_NOT);}
-{PARENDIR}                     {return symbol(sym.AND_NOT);}
-{CHAVEESQ}                    {return symbol(sym.AND_NOT);}
-{CHAVEDIR}                     {return symbol(sym.AND_NOT);}
-{COLCHESQ}                    {return symbol(sym.AND_NOT);}
-{COLCHDIR}                     {return symbol(sym.AND_NOT);}
-{VIRGULA}                     {return symbol(sym.AND_NOT);}
-{PONTO}                     {return symbol(sym.AND_NOT);}
-{DOISPONTOS}                     {return symbol(sym.AND_NOT);}
-{PONTOVIRGULA}                     {return symbol(sym.AND_NOT);}
-{APOSTROFO}                    {return symbol(sym.AND_NOT);}
+{PARENESQ}                    {return symbol(sym.PARENESQ);}
+{PARENDIR}                     {return symbol(sym.PARENDIR);}
+{CHAVEESQ}                    {return symbol(sym.CHAVEESQ);}
+{CHAVEDIR}                     {return symbol(sym.CHAVEDIR);}
+{COLCHESQ}                    {return symbol(sym.COLCHESQ);}
+{COLCHDIR}                     {return symbol(sym.COLCHDIR);}
+{VIRGULA}                     {return symbol(sym.VIRGULA);}
+{PONTO}                     {return symbol(sym.PONTO);}
+{DOISPONTOS}                     {return symbol(sym.DOISPONTOS);}
+{PONTOVIRGULA}                     {return symbol(sym.PONTOVIRGULA);}
+{APOSTROFO}                    {return symbol(sym.APOSTROFO);}
 
-{BREAK}                    {return symbol(sym.AND_NOT);}
-{CASE}                    {return symbol(sym.AND_NOT);}
-{CHAN}                    {return symbol(sym.AND_NOT);}
-{CONST}                     {return symbol(sym.AND_NOT);}
-{CONTINUE}                     {return symbol(sym.AND_NOT);}
+{BREAK}                    {return symbol(sym.BREAK);}
+{CASE}                    {return symbol(sym.CASE);}
+{CHAN}                    {return symbol(sym.CHAN);}
+{CONST}                     {return symbol(sym.CONST);}
+{CONTINUE}                     {return symbol(sym.CONTINUE);}
 
-{DEFAULT}                    {return symbol(sym.AND_NOT);}
-{DEFER}                     {return symbol(sym.AND_NOT);}
-{ELSE}                    {return symbol(sym.AND_NOT);}
-{FALLTHROUGH}                   {return symbol(sym.AND_NOT);}
-{FOR}                    {return symbol(sym.AND_NOT);}
+{DEFAULT}                    {return symbol(sym.DEFAULT);}
+{DEFER}                     {return symbol(sym.DEFER);}
+{ELSE}                    {return symbol(sym.ELSE);}
+{FALLTHROUGH}                   {return symbol(sym.FALLTHROUGH);}
+{FOR}                    {return symbol(sym.FOR);}
 
-{FUNC}                     {return symbol(sym.AND_NOT);}
-{GO}                    {return symbol(sym.AND_NOT);}
-{GOTO}                    {return symbol(sym.AND_NOT);}
-{IF}                    {return symbol(sym.AND_NOT);}
-{IMPORT}                     {return symbol(sym.AND_NOT);}
+{FUNC}                     {return symbol(sym.FUNC);}
+{GO}                    {return symbol(sym.GO);}
+{GOTO}                    {return symbol(sym.GOTO);}
+{IF}                    {return symbol(sym.IF);}
+{IMPORT}                     {return symbol(sym.IMPORT);}
 
-{INTERFACE}                     {return symbol(sym.AND_NOT);}
-{MAP}                     {return symbol(sym.AND_NOT);}
-{PACKAGE}                     {return symbol(sym.AND_NOT);}
-{RANGE}                     {return symbol(sym.AND_NOT);}
-{RETURN}                     {return symbol(sym.AND_NOT);}
+{INTERFACE}                     {return symbol(sym.INTERFACE);}
+{MAP}                     {return symbol(sym.MAP);}
+{PACKAGE}                     {return symbol(sym.PACKAGE);}
+{RANGE}                     {return symbol(sym.RANGE);}
+{RETURN}                     {return symbol(sym.RETURN);}
 
-{SELECT}                     {return symbol(sym.AND_NOT);}
-{STRUCT}                     {return symbol(sym.AND_NOT);}
-{SWITCH}                     {return symbol(sym.AND_NOT);}
-{TYPE}                     {return symbol(sym.AND_NOT);}
-{VAR}                     {return symbol(sym.AND_NOT);}
+{SELECT}                     {return symbol(sym.SELECT);}
+{STRUCT}                     {return symbol(sym.STRUCT);}
+{SWITCH}                     {return symbol(sym.SWITCH);}
+{TYPE}                     {return symbol(sym.TYPE);}
+{VAR}                     {return symbol(sym.VAR);}
 
-{TIPOBOOL} = "bool"                     { imprimir("Tipo de variável bool", yytext()); }
-{TIPOINT} = "int"                     { imprimir("Tipo de variável int", yytext()); }
-{TIPOINT8} = "int8"                     { imprimir("Tipo de variável int 8bits", yytext()); }
-{TIPOINT16} = "int16"                     { imprimir("Tipo de variável int 16bits", yytext()); }
-{TIPOINT32} = "int32"                     { imprimir("Tipo de variável int 32bits", yytext()); }
-{TIPOINT64} = "int64"                     { imprimir("Tipo de variável int 64bits", yytext()); }
-{TIPOUINT} = "uint"                     { imprimir("Tipo de variável int não-definido", yytext()); }
-{TIPOUINT8} = "uint8"                     { imprimir("Tipo de variável int não-definido de 8bits", yytext()); }
-{TIPOUINT16} = "uint16"                     { imprimir("Tipo de variável int não-definido de 16bits", yytext()); }
-{TIPOUINT32} = "uint32"                     { imprimir("Tipo de variável int não-definido de 32bits", yytext()); }
-{TIPOUINT64} = "uint64"                     { imprimir("Tipo de variável int não-definido de 64bits", yytext()); }
-{TIPOUINTPTR} = "uintptr"                     { imprimir("Tipo de variável int ", yytext()); }
-{TIPOFLOAT32} = "float32"                     { imprimir("Tipo de variável float 32bits", yytext()); }
-{TIPOFLOAT64} = "float64"                     { imprimir("Tipo de variável float 64bits", yytext()); }
-{TIPOCOMPLEX64} = "complex64"                     { imprimir("Tipo de variável numero complexo de 64bits", yytext()); }
-{TIPOCOMPLEX128} = "complex128"                     { imprimir("Tipo de variável numero complexo de 128bits", yytext()); }
-{TIPOSTRING} = "string"                     { imprimir("Tipo de variável string", yytext()); }
-{POINTER} = "Pointer"                     { imprimir("Tipo de variável apontador", yytext()); }
-{UNTYPEDBOOL} = "untyped bool"                     { imprimir("Tipo de variável untyped bool", yytext()); }
-{UNTYPEDINT} = "untyped int"                     { imprimir("Tipo de variável untyped int", yytext()); }
-{UNTYPEDRUNE} = "untyped rune"                     { imprimir("Tipo de variável untyped rune", yytext()); }
-{UNTYPEDFLOAT} = "untyped float"                     { imprimir("Tipo de variável untyped float", yytext()); }
-{UNTYPEDCOMPLEX} = "untyped complex"                     { imprimir("Tipo de variável untyped complex", yytext()); }
-{UNTYPEDSTRING} = "untyped string"                     { imprimir("Tipo de variável untyped string", yytext()); }
-{UNTYPEDNIL} = "untyped nil"                     { imprimir("Tipo de variável untyped nil", yytext()); }
+{TIPOBOOL}                   {return symbol(sym.TIPOBOOL);}
+{TIPOINT}                     {return symbol(sym.TIPOINT);}
+{TIPOINT8}                     {return symbol(sym.TIPOINT8);}
+{TIPOINT16}                     {return symbol(sym.TIPOINT16);}
+{TIPOINT32}                  {return symbol(sym.TIPOINT32);}
+{TIPOINT64}                  {return symbol(sym.TIPOINT64);}
+{TIPOUINT}                   {return symbol(sym.TIPOUINT);}
+{TIPOUINT8}                    {return symbol(sym.TIPOUINT8);}
+{TIPOUINT16}              {return symbol(sym.TIPOUINT16);}
+{TIPOUINT32}                    {return symbol(sym.TIPOUINT32);}
+{TIPOUINT64}                {return symbol(sym.TIPOUINT64);}
+{TIPOUINTPTR}                    {return symbol(sym.TIPOUINTPTR);}
+{TIPOFLOAT32}                 {return symbol(sym.FLOAT32);}
+{TIPOFLOAT64}                      {return symbol(sym.FLOAT64);}
+{TIPOCOMPLEX64}                     {return symbol(sym.COMPLEX64);}
+{TIPOCOMPLEX128}                    {return symbol(sym.COMPLEX128);}
+{TIPOSTRING}                  {return symbol(sym.TIPOSTRING);}
+{POINTER}                    {return symbol(sym.POINTER);}
+{UNTYPEDBOOL}                   {return symbol(sym.UNTYPEDBOOL);}
+{UNTYPEDINT}                   {return symbol(sym.UNTYPEDINTT);}
+{UNTYPEDRUNE}                     {return symbol(sym.UNTYPEDRUNE);}
+{UNTYPEDFLOAT}                  {return symbol(sym.UNTYPEDFLOAT);}
+{UNTYPEDCOMPLEX}                   {return symbol(sym.UNTYPEDCOMPLEX);}
+{UNTYPEDSTRING}                   {return symbol(sym.UNTYPEDSTRING);}
+{UNTYPEDNIL}                  {return symbol(sym.UNTYPEDNIL);}
 
-{FORMATSTRING}  = "%s"                     { imprimir("Forrmato string", yytext()); }
-{FORMATINTEGER} = "%d"                     { imprimir("Forrmato inteiro", yytext()); }
-{FORMATFLOAT} = "%f"                     { imprimir("Forrmato float", yytext()); }
-{FORMATBOOL} = "%t"                     { imprimir("Forrmato boolean", yytext()); }
-{FORMATDEFAULT} = "%v"                     { imprimir("Forrmato default", yytext()); }
-{FORMATVALOR} = "%#v"                     { imprimir("Forrmato valor", yytext()); }
-{FORMATTYPE} = "%T"                     { imprimir("Forrmato tipo generico", yytext()); }
-{FORMATPERCENT}  = "%%"                     { imprimir("Forrmato porcento", yytext()); }
-{FORMATPOINTER} = "%p"                     { imprimir("Forrmato apontador", yytext()); }
-{FORMATUNDEFINED} = "%x"                     { imprimir("Forrmato indefinido", yytext()); }
+{FORMATSTRING}                    {return symbol(sym.FORMATSTRING);}
+{FORMATINTEGER}                    {return symbol(sym.FORMATINTEGER);}
+{FORMATFLOAT}                  {return symbol(sym.FORMATFLOAT);}
+{FORMATBOOL}                   {return symbol(sym.FORMATBOOL);}
+{FORMATDEFAULT}                 {return symbol(sym.FORMATDEFAULT);}
+{FORMATVALOR}                    {return symbol(sym.FORMATVALOR);}
+{FORMATTYPE}                  {return symbol(sym.FORMATTYPE);}
+{FORMATPERCENT}                    {return symbol(sym.FORMATPERCENT);}
+{FORMATPOINTER}                   {return symbol(sym.FORMATPOINTER);}
+{FORMATUNDEFINED}                     {return symbol(sym.FORMATUNDEFINED);}
 
-{INICIOCOMENT} = "/*"                     { imprimir("Inicio do comentario", yytext()); }
-{FINALCOMENT} = "*/"                     { imprimir("Final do comentario", yytext()); }
-{EOF} = "EOF"                     { imprimir("Palavra reservada EOF var", yytext()); }
+{INICIOCOMENT}                    {return symbol(sym.INICIOCOMENT);}
+{FINALCOMENT}                  {return symbol(sym.FINALCOMENT);}
+{EOF}                  {return symbol(sym.EOF);}
 
-{NEWLINE}        = \n
-{UNICODE_CHAR}   = [^\n]
-{UNICODE_CHAR_DASH}   = [^"\""\n\\]
+{NEWLINE}       				{return symbol(sym.NEWLINE);}
+{UNICODE_CHAR}  				{return symbol(sym.UNICODE_CHAR);}
+{UNICODE_CHAR_DASH}   	{return symbol(sym.UNICODE_CHAR_DASH);}
 
-{INTEIRO}                     { imprimir("Número Inteiro", yytext()); }
-{FLOAT}                     { imprimir("Número Float", yytext()); }
-{BOOL}                     { imprimir("Valor boolean", yytext()); }
-{BRANCO}                     { imprimir("Espaço em branco", yytext()); }
-{ID}                          { return symbol(sym.ID, yytext()); }
+{INTEIRO}                     {return symbol(sym.INTEIRO);}
+{FLOAT}                    {return symbol(sym.FLOAT);}
+{BOOL}                     {return symbol(sym.BOOL);}
+{BRANCO}                     {return symbol(sym.BRANCO);}
+{ID}                          {return symbol(sym.ID);}
 
 . { throw new RuntimeException("Caractere inválido " + yytext()); }
